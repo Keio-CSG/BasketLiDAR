@@ -3,10 +3,7 @@
 **BasketLiDAR** is a multimodal dataset pairing synchronized LiDAR point clouds with RGB cameras in professional basketball scenes, designed for Multi-Object Tracking (MOT) research.  
 It includes data, baseline notebooks, and standardized evaluation to facilitate reproducible experiments for LiDAR-only and camera–LiDAR fusion tracking.
 
-> **Paper:** The project paper will be released in **November 2025**.  
-> <!--※TODO: 論文公開後に実URLへ置き換えてください → [Details here](#)>
-
----
+**Paper:** The project paper will be released in **November 2025**.  
 
 ## Table of Contents
 - [Data Visualization](#data-visualization)
