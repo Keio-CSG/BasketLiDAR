@@ -134,8 +134,11 @@ D:.
 
 ## LiDAR-based Tracking
 
-<!-- ※OPTIONAL: LiDARのみのトラッキング結果を示す動画（例: `assets/visualizations/lidar_tracking_demo.mp4`）やGIFを追加してください。-->
-![tracking preview](visualizations/lidar_only.mp4)
+
+
+https://github.com/user-attachments/assets/a8ea9b18-ffb7-4376-95dc-6ddfc8811371
+
+
 
 This section describes the LiDAR-based tracking pipeline included in the BasketLiDAR dataset.  
 It consists of two major steps, both implemented as Jupyter notebooks.
