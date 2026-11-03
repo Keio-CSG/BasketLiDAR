@@ -1,0 +1,198 @@
+/* ---- Figures ---- */
+.paper-figure {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.figure-block {
+  margin: 1.25rem 0 1.75rem;
+}
+
+.figure-caption {
+  margin-top: 0.6rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #4a4a4a;
+}
+
+.figure-narrow {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- Headline numbers ---- */
+.highlight-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 760px;
+  margin: 1.5rem auto 0.5rem;
+}
+
+.highlight-stat {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0.9rem 0.75rem;
+  background: #fff;
+  text-align: center !important;
+}
+
+.highlight-stat .stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #2563eb;
+  text-align: center !important;
+}
+
+.highlight-stat .stat-label {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: #4a4a4a;
+  text-align: center !important;
+}
+
+@media (max-width: 600px) {
+  .highlight-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Pending links ---- */
+.link-block-pending {
+  opacity: 0.6;
+}
+
+.button.is-link-pending {
+  opacity: 1;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* ---- Tables ---- */
+.fwltable-card {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.fwltable__caption {
+  caption-side: top;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  color: #363636;
+}
+
+.fwltable__table th,
+.fwltable__table td {
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.fwltable__table td:not(:first-child),
+.fwltable__table th:not(:first-child) {
+  text-align: center !important;
+}
+
+.fwltable__table tr.is-ours td {
+  background: #eff6ff;
+}
+
+.fwltable__divider td {
+  padding: 0 !important;
+  height: 3px;
+  background: #dbdbdb;
+}
+
+.fwltable-check {
+  color: #15803d;
+  font-weight: 700;
+}
+
+.fwltable-cross {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.fwltable__note {
+  font-size: 0.88rem;
+  color: #4a4a4a;
+}
+
+/* ---- Contribution list ---- */
+.contribution-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* Keep textual content left-aligned across the page */
+#main-content h1,
+#main-content h2,
+#main-content h3,
+#main-content h4,
+#main-content h5,
+#main-content h6,
+#main-content p,
+#main-content li,
+#main-content th,
+#main-content td,
+#main-content .subtitle,
+#main-content .title,
+#main-content .content,
+#main-content .has-text-centered,
+#main-content .has-text-justified,
+footer h1,
+footer h2,
+footer h3,
+footer h4,
+footer h5,
+footer h6,
+footer p,
+footer li,
+footer th,
+footer td,
+footer .content,
+footer .has-text-centered,
+footer .has-text-justified {
+  text-align: left !important;
+}
+
+/* Keep the top hero title/author area centered */
+#main-content .top-hero .column,
+#main-content .top-hero .title,
+#main-content .top-hero .publication-title,
+#main-content .top-hero .publication-authors,
+#main-content .top-hero .author-block,
+#main-content .top-hero .eql-cntrb,
+#main-content .top-hero .publication-links,
+#main-content .top-hero .has-text-centered,
+#main-content .top-hero p,
+#main-content .top-hero span {
+  text-align: center !important;
+}
+
+/* Keep all h2 centered even when body text stays left-aligned */
+#main-content h2,
+#main-content h2.title,
+#main-content h2.subtitle,
+#main-content h2.has-text-centered,
+footer h2,
+footer h2.title,
+footer h2.subtitle {
+  text-align: center !important;
+}
+
+/* Keep BibTeX section left-aligned */
+#main-content #BibTeX h2,
+#main-content #BibTeX h2.title,
+#main-content #BibTeX h2.subtitle {
+  text-align: left !important;
+}
+
+/* Center cells of numeric table columns despite the left-align rule above */
+#main-content .fwltable__table td:not(:first-child),
+#main-content .fwltable__table th:not(:first-child) {
+  text-align: center !important;
+}

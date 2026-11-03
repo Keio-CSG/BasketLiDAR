@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="BasketLiDAR: The First LiDAR-Camera Multimodal Dataset for Professional Basketball MOT - Ryunosuke Hayashi, Kohei Torimi, Rokuto Nagata, Kazuma Ikeda, Ozora Sako, Taichi Nakamura, Masaki Tani, Yoshimitsu Aoki, Kentaro Yoshioka">
+  <meta name="description" content="BasketLiDAR is the first sports MOT dataset that pairs LiDAR point clouds with synchronized multi-view camera footage of professional basketball players: 4,445 frames and 3,105 player IDs. LiDAR-only tracking runs at 28.4 FPS, about 130x faster than camera-only 3D tracking, and LiDAR-camera fusion improves MOTA by 11.5%.">
+  <meta name="keywords" content="LiDAR, multi-object tracking, MOT, basketball, sports analytics, dataset, LiDAR-camera fusion, re-identification, MMSports 2025">
+  <meta name="author" content="Ryunosuke Hayashi, Kohei Torimi, Rokuto Nagata, Kazuma Ikeda, Ozora Sako, Taichi Nakamura, Masaki Tani, Yoshimitsu Aoki, Kentaro Yoshioka">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Keio CSG (Computing and Sensing Group) - Keio University">
+  <meta property="og:title" content="BasketLiDAR: The First LiDAR-Camera Multimodal Dataset for Professional Basketball MOT">
+  <meta property="og:description" content="The first sports MOT dataset pairing LiDAR point clouds with synchronized multi-view cameras, recorded with professional basketball players: 4,445 frames and 3,105 player IDs, with real-time LiDAR-only and LiDAR-camera fusion trackers.">
+  <meta property="og:url" content="https://keio-csg.github.io/BasketLiDAR/">
+  <meta property="og:image" content="https://keio-csg.github.io/BasketLiDAR/static/images/teaser.jpg">
+  <meta property="og:image:alt" content="BasketLiDAR recording environment, LiDAR point cloud and camera image with player bounding boxes">
+  <meta property="article:author" content="Ryunosuke Hayashi">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="LiDAR">
+  <meta property="article:tag" content="Multi-Object Tracking">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BasketLiDAR: The First LiDAR-Camera Multimodal Dataset for Professional Basketball MOT">
+  <meta name="twitter:description" content="4,445 frames and 3,105 player IDs of professional basketball, with LiDAR and multi-view cameras in sync. LiDAR-only tracking at 28.4 FPS; fusion improves MOTA by 11.5%.">
+  <meta name="twitter:image" content="https://keio-csg.github.io/BasketLiDAR/static/images/teaser.jpg">
+  <meta name="twitter:image:alt" content="BasketLiDAR recording environment, LiDAR point cloud and camera image with player bounding boxes">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="BasketLiDAR: The First LiDAR-Camera Multimodal Dataset for Professional Basketball MOT">
+  <meta name="citation_author" content="Hayashi, Ryunosuke">
+  <meta name="citation_author" content="Torimi, Kohei">
+  <meta name="citation_author" content="Nagata, Rokuto">
+  <meta name="citation_author" content="Ikeda, Kazuma">
+  <meta name="citation_author" content="Sako, Ozora">
+  <meta name="citation_author" content="Nakamura, Taichi">
+  <meta name="citation_author" content="Tani, Masaki">
+  <meta name="citation_author" content="Aoki, Yoshimitsu">
+  <meta name="citation_author" content="Yoshioka, Kentaro">
+  <meta name="citation_publication_date" content="2025">
+  <meta name="citation_conference_title" content="Proceedings of the 8th International ACM Workshop on Multimedia Content Analysis in Sports (MMSports '25)">
+  <meta name="citation_firstpage" content="78">
+  <meta name="citation_lastpage" content="86">
+  <meta name="citation_doi" content="10.1145/3728423.3759401">
+  <meta name="citation_arxiv_id" content="2508.15299">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>BasketLiDAR: The First LiDAR-Camera Multimodal Dataset for Professional Basketball MOT | MMSports 2025</title>
+
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/favicon/csg-favicon.ico">
+  <link rel="apple-touch-icon" href="static/favicon/csg-favicon.ico">
+
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/custom.css">
+
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "BasketLiDAR: The First LiDAR-Camera Multimodal Dataset for Professional Basketball MOT",
+    "description": "The first sports MOT dataset combining LiDAR point clouds with synchronized multi-view camera footage of professional basketball players, with a real-time LiDAR-only tracker and a LiDAR-camera fusion tracker.",
+    "author": [
+      { "@type": "Person", "name": "Ryunosuke Hayashi", "affiliation": { "@type": "Organization", "name": "Keio University" } },
+      { "@type": "Person", "name": "Kohei Torimi", "affiliation": { "@type": "Organization", "name": "Keio University" } },
+      { "@type": "Person", "name": "Rokuto Nagata", "affiliation": { "@type": "Organization", "name": "Keio University" } },
+      { "@type": "Person", "name": "Kazuma Ikeda", "affiliation": { "@type": "Organization", "name": "Keio University" } },
+      { "@type": "Person", "name": "Ozora Sako", "affiliation": { "@type": "Organization", "name": "Keio University" } },
+      { "@type": "Person", "name": "Taichi Nakamura", "affiliation": { "@type": "Organization", "name": "AISIN CORPORATION" } },
+      { "@type": "Person", "name": "Masaki Tani", "affiliation": { "@type": "Organization", "name": "AISIN CORPORATION" } },
+      { "@type": "Person", "name": "Yoshimitsu Aoki", "affiliation": { "@type": "Organization", "name": "Keio University" } },
+      { "@type": "Person", "name": "Kentaro Yoshioka", "affiliation": { "@type": "Organization", "name": "Keio University" } }
+    ],
+    "datePublished": "2025",
+    "publisher": { "@type": "Organization", "name": "ACM" },
+    "url": "https://keio-csg.github.io/BasketLiDAR/",
+    "image": "https://keio-csg.github.io/BasketLiDAR/static/images/teaser.jpg",
+    "sameAs": ["https://doi.org/10.1145/3728423.3759401", "https://arxiv.org/abs/2508.15299"],
+    "keywords": ["LiDAR", "multi-object tracking", "basketball", "sports analytics", "dataset", "LiDAR-camera fusion"],
+    "isAccessibleForFree": true
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- More Works Dropdown -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab">
+      <i class="fas fa-flask"></i>
+      More Works
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>More Works from Our Lab</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="works-list">
+        <a href="https://keio-csg.github.io/Ghost-FWL/" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Ghost-FWL: A Large-Scale Full-Waveform LiDAR Dataset for Ghost Detection and Removal</h5>
+            <p>The first and largest annotated mobile full-waveform LiDAR dataset for ghost detection and removal, with 24K frames across 10 scenes and 7.5 billion peak-level annotations.</p>
+            <span class="work-venue">CVPR 2026</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="https://keio-csg.github.io/FWL-ToPM/" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Towards Real-Time Full-Waveform LiDAR Transformers via Intensity-Guided Token Reduction and Physics-Aware Augmentation</h5>
+            <p>Intensity-guided token pruning and merging for full-waveform LiDAR, reaching 53.2 FPS with a 9-point F1 gain on Ghost-FWL.</p>
+            <span class="work-venue">NeurIPS 2026</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="https://keio-csg.github.io/PULSAR_Net_project_page/" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>PULSAR-Net: Neural Reconstruction of LiDAR Point Clouds under Jamming Attacks via Full-Waveform Representation and Simultaneous Laser Sensing</h5>
+            <p>The first effective defense against LiDAR jamming: separates attack pulses from real reflections in the full waveform to reconstruct the point cloud.</p>
+            <span class="work-venue">NeurIPS 2026</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="https://sites.google.com/keio.jp/keio-csg/projects/optical-lidar-communication?authuser=0" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Optical LiDAR Communication: Repurposing Existing LiDAR Sensors for Infrastructure-to-Vehicle Communication</h5>
+            <p>Repurposes existing LiDAR sensors as V2I communication devices by combining LiDAR injection with 2D codes, with no additional hardware on the robot.</p>
+            <span class="work-venue">RA-L 2025</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+  <section class="hero top-hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">BasketLiDAR: The First LiDAR-Camera Multimodal Dataset for Professional Basketball MOT</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Ryunosuke Hayashi<sup>1</sup>,</span>
+              <span class="author-block">Kohei Torimi<sup>1</sup>,</span>
+              <span class="author-block">Rokuto Nagata<sup>1</sup>,</span>
+              <span class="author-block"><a href="https://ike-kazu.github.io/kazuma-ikeda.github.io/" target="_blank">Kazuma Ikeda</a><sup>1</sup>,</span>
+              <span class="author-block">Ozora Sako<sup>1</sup>,</span>
+              <span class="author-block">Taichi Nakamura<sup>2</sup>,</span>
+              <span class="author-block">Masaki Tani<sup>2</sup>,</span>
+              <span class="author-block">Yoshimitsu Aoki<sup>1</sup>,</span>
+              <span class="author-block"><a href="https://keio-csg.github.io/" target="_blank">Kentaro Yoshioka</a><sup>1</sup></span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <sup>1</sup>Keio University&nbsp;&nbsp;&nbsp;<sup>2</sup>AISIN CORPORATION<br>
+                MMSports '25 (8th International ACM Workshop on Multimedia Content Analysis in Sports)
+              </span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://doi.org/10.1145/3728423.3759401" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2508.15299" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://github.com/Keio-CSG/BasketLiDAR" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="#dataset-access"
+                  class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-database"></i></span>
+                    <span>Dataset</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Teaser -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <div class="image is-fullwidth">
+          <img src="static/images/teaser.jpg" alt="BasketLiDAR recording environment, LiDAR point cloud and camera image with player bounding boxes" class="paper-figure">
+        </div>
+        <p class="figure-caption">
+          <strong>(a)</strong> BasketLiDAR captures comprehensive court coverage without blind spots using three sets of calibrated camera-LiDAR sensor systems.
+          <strong>(b, c)</strong> BasketLiDAR data: LiDAR point clouds, multi-view camera images, and player bounding boxes in each point cloud with fully synchronized IDs across all modalities.
+        </p>
+
+        <div class="highlight-stats">
+          <div class="highlight-stat">
+            <span class="stat-value">3,105</span>
+            <span class="stat-label">Player IDs over 4,445 frames, synchronized across 3 LiDARs and 3 cameras</span>
+          </div>
+          <div class="highlight-stat">
+            <span class="stat-value">28.4 FPS</span>
+            <span class="stat-label">LiDAR-only tracking, about 130&times; faster than camera-only</span>
+          </div>
+          <div class="highlight-stat">
+            <span class="stat-value">+11.5%</span>
+            <span class="stat-label">MOTA over camera-only with LiDAR-camera fusion</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End teaser -->
+
+
+  <!-- Paper abstract -->
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+                Real-time 3D trajectory player tracking in sports plays a crucial role in tactical analysis, performance evaluation, and enhancing spectator experience.
+                Traditional systems rely on multi-camera setups, but are constrained by the inherently two-dimensional nature of video data and the need for complex 3D reconstruction processing, making real-time analysis challenging.
+                Basketball, in particular, represents one of the most difficult scenarios in the MOT field, as ten players move rapidly and complexly within a confined court space, with frequent occlusions caused by intense physical contact.
+              </p>
+              <p>
+                To address these challenges, this paper constructs BasketLiDAR, the first multimodal dataset in the sports MOT field that combines LiDAR point clouds with synchronized multi-view camera footage in a professional basketball environment, and proposes a novel MOT framework that simultaneously achieves improved tracking accuracy and reduced computational cost.
+                The BasketLiDAR dataset contains a total of 4,445 frames and 3,105 player IDs, with fully synchronized IDs between three LiDAR sensors and three multi-view cameras.
+                We recorded 5-on-5 and 3-on-3 game data from actual professional basketball players, providing complete 3D positional information and ID annotations for each player.
+                Based on this dataset, we developed a novel MOT algorithm that leverages LiDAR's high-precision 3D spatial information.
+                The proposed method consists of a real-time tracking pipeline using LiDAR alone and a multimodal tracking pipeline that fuses LiDAR and camera data.
+                Experimental results demonstrate that our approach achieves real-time operation, which was difficult with conventional camera-only methods, while achieving superior tracking performance even under occlusion conditions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End paper abstract -->
+
+
+  <!-- Contributions -->
+  <section class="hero is-small is-light section-white">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Contributions</h2>
+            <div class="content">
+              <ul class="contribution-list">
+                <li><strong>LiDAR-camera multimodal sports MOT dataset.</strong> BasketLiDAR is the first synchronized MOT dataset combining LiDAR point clouds and multi-view camera footage of professional basketball players, with ID and 3D position annotations for all players.</li>
+                <li><strong>Fusion-based MOT framework.</strong> A multimodal MOT framework that integrates LiDAR-based tracking with ID re-identification from camera footage, achieving real-time and high-precision MOT.</li>
+                <li><strong>Research infrastructure for sports MOT.</strong> The dataset and the model implementation are shared to advance LiDAR-based sports analysis.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End contributions -->
+
+
+  <!-- Dataset -->
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">The BasketLiDAR Dataset</h2>
+            <div class="content has-text-justified">
+              <p>
+                We recorded the practice sessions of <strong>SeaHorses Mikawa</strong>, a professional team in Japan's B.League B1, over two days.
+                More than ten first-team players covering every position (PG, SG, SF, PF, C) took part, in 3-on-3 and 5-on-5 games and in repeated set plays in front of the goal: sessions with game-level intensity and frequent player occlusions.
+                The recordings were then split into short clips averaging 13.1 seconds per play.
+              </p>
+
+              <h3 class="title is-5">Sensor Setup</h3>
+              <p>
+                Three camera-LiDAR units overlook the court from different directions, so that the whole court is covered without blind spots and occlusions between players are kept to a minimum.
+                Each unit pairs a camera (Insta360 Ace Pro) and a LiDAR (Livox HAP) side by side on a tripod.
+              </p>
+              <ul>
+                <li><strong>Frame rate:</strong> 10 FPS for both camera and LiDAR, hardware-synchronized</li>
+                <li><strong>Camera:</strong> 3840&times;2160 (4K), FOV 95&deg; &times; 78&deg;, aperture F2.6</li>
+                <li><strong>LiDAR:</strong> angular resolution 0.18&deg; &times; 0.23&deg;, 144 lines, 452,000 pts/s, FOV 125&deg; &times; 25&deg;, effective range 150 m</li>
+                <li><strong>Calibration:</strong> extrinsic parameters between the three units acquired in advance</li>
+              </ul>
+            </div>
+
+            <div class="figure-block figure-narrow">
+              <img src="static/images/setup.png" alt="Sensor placement on the court and the camera-LiDAR sensor unit" class="paper-figure" loading="lazy">
+              <p class="figure-caption">
+                <strong>Recording environment.</strong>
+                (a) Three sensor systems combining camera and LiDAR are positioned at different locations within the court, giving comprehensive court coverage without blind spots under the FOV constraints.
+                (b) In each sensor system, the camera (Insta360 Ace Pro) and LiDAR (Livox HAP) are positioned adjacently.
+              </p>
+            </div>
+
+            <div class="fwltable-card">
+              <div class="table-container">
+                <table class="table is-bordered is-striped is-hoverable is-fullwidth fwltable__table">
+                  <caption class="fwltable__caption"><strong>BasketLiDAR dataset statistics.</strong></caption>
+                  <thead>
+                    <tr><th>Metric</th><th>Value</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Total frames</td><td>4,445</td></tr>
+                    <tr><td>Total bboxes</td><td>397,757</td></tr>
+                    <tr><td>Total IDs</td><td>3,105</td></tr>
+                    <tr><td>Sequences</td><td>34</td></tr>
+                    <tr><td>Avg. sequence length</td><td>13.1 s</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="content has-text-justified">
+              <h3 class="title is-5">Annotation</h3>
+              <ul>
+                <li><strong>Camera footage:</strong> bounding boxes and IDs annotated separately for each of the three viewpoints.</li>
+                <li><strong>LiDAR point clouds:</strong> annotated once, after the point clouds from the three LiDARs are merged in a world coordinate system.</li>
+                <li><strong>Targets:</strong> players' limbs and entire torso; other objects such as the ball are excluded unless in contact with a player.</li>
+                <li><strong>Occlusion:</strong> a player's box is annotated even when occluded, as long as part of the body is visible.</li>
+                <li><strong>ID consistency:</strong> each player keeps a unique ID throughout a clip, consistent across annotators, with multiple rounds of quality checks and corrections.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End dataset -->
+
+
+  <!-- Method: LiDAR-only -->
+  <section class="hero is-small is-light section-white">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">LiDAR-Only MOT Pipeline</h2>
+            <div class="content has-text-justified">
+              <p>
+                Camera-based sports 3D MOT has to detect players in every view, match them across cameras and triangulate their 3D positions; triangulation alone took 86% of the processing time in our camera-only implementation.
+                LiDAR measures 3D directly, so our pipeline skips 3D reconstruction entirely and works on a bird's-eye view (BEV), staying compatible with existing tracking-by-detection 2D trackers.
+              </p>
+              <ul>
+                <li><strong>Multi-LiDAR integration:</strong> point clouds from the three LiDARs are merged into a world coordinate system using the pre-acquired extrinsics.</li>
+                <li><strong>Region filtering:</strong> floor and goalpost points are removed by height filtering, and points outside the court are cropped, leaving only the players.</li>
+                <li><strong>BEV projection:</strong> the filtered points are projected onto a BEV map, so that 2D detectors and trackers, which generalize well with limited data, can be used.</li>
+                <li><strong>Detection and tracking:</strong> YOLOv11, trained on BEV-projected player images from BasketLiDAR, detects players; ByteTrack associates IDs over time.</li>
+              </ul>
+            </div>
+
+            <div class="figure-block">
+              <img src="static/images/lidar_only_pipeline.png" alt="LiDAR-only MOT pipeline from raw point clouds to BEV tracking results" class="paper-figure" loading="lazy">
+              <p class="figure-caption">
+                <strong>LiDAR-only MOT pipeline.</strong>
+                Point clouds acquired from three LiDARs are integrated in a world coordinate system using calibration parameters, and only player regions are extracted through court region cropping and height filtering.
+                BEV projection then enables player detection using 2D detectors and ID association by trackers.
+              </p>
+            </div>
+
+            <div class="figure-block figure-narrow">
+              <video class="paper-figure" controls muted loop playsinline preload="metadata">
+                <source src="static/videos/lidar_only.mp4" type="video/mp4">
+              </video>
+              <p class="figure-caption">
+                <strong>LiDAR-only tracking</strong> on a BasketLiDAR clip.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End method: LiDAR-only -->
+
+
+  <!-- Method: LiDAR-camera fusion -->
+  <section class="hero is-small is-light">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">LiDAR-Camera Fusion</h2>
+            <div class="content has-text-justified">
+              <p>
+                LiDAR captures the 3D geometry of the court cheaply but carries no appearance cues, so LiDAR-only tracking can switch, lose or update IDs whenever players occlude each other.
+                The fusion framework runs the fast LiDAR-only pipeline first, then applies camera-based re-identification <em>only to the occlusion sessions</em>, keeping both high speed and high ID consistency.
+              </p>
+              <ul>
+                <li><strong>Occlusion-Session-Extractor:</strong> monitors the number of active track IDs frame by frame. A session opens when the count drops and closes when it returns, giving the time span and the IDs involved.</li>
+                <li><strong>LiDAR-camera detection matching:</strong> each player's BEV box is lifted to a 3D voxel and projected into every camera. The camera where the player is least overlapped by others is chosen, and frames are scanned backward and forward from the occlusion until YOLOv11 finds exactly one detection overlapping the projected box: a clean view of the player.</li>
+                <li><strong>Re-identification:</strong> features of the clean patches before and after the occlusion are extracted with a ResNet-50 trained on Market1501, and the pair with the highest cosine similarity is treated as the same player, restoring the pre-occlusion ID.</li>
+              </ul>
+            </div>
+
+            <div class="figure-block">
+              <img src="static/images/fusion_pipeline.jpg" alt="LiDAR-camera fusion pipeline with occlusion session extraction and camera-based re-identification" class="paper-figure" loading="lazy">
+              <p class="figure-caption">
+                <strong>LiDAR-camera-fusion pipeline.</strong>
+                Real-time tracking using LiDAR point clouds is adaptively integrated with camera-based Re-ID for occlusion recovery.
+                The Occlusion Session Extractor triggers appearance feature matching to restore correct ID associations when player occlusions occur.
+              </p>
+            </div>
+
+            <div class="figure-block">
+              <img src="static/images/occlusion_session_extractor.jpg" alt="Occlusion session extractor counting active track IDs" class="paper-figure" loading="lazy">
+              <p class="figure-caption">
+                <strong>Occlusion-Session-Extractor.</strong>
+                The module opens an occlusion session whenever the number of active track IDs drops below its previous level and closes it once the count returns.
+                For each session, it outputs the time span and the IDs involved, together with their trajectories.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End method: LiDAR-camera fusion -->
+
+
+  <!-- Results -->
+  <section class="hero is-small is-light section-white">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Results</h2>
+
+            <div class="content has-text-justified">
+              <p>
+                The 34 clips are split into 24 for training and 10 for testing, balanced by the number of players and the frequency of occlusions.
+                All methods share YOLOv11 as the detector, retrained on each method's training split.
+                The LiDAR pipelines track with ByteTrack, and the camera-only baseline, which reconstructs 3D by triangulation across views, tracks with OC-SORT.
+                Speed is measured on an AWS EC2 g4dn.xlarge instance.
+              </p>
+              <h3 class="title is-5">Accuracy and Speed</h3>
+              <p>
+                LiDAR-camera fusion improves on the camera-only approach across all metrics, by <strong>11.5% in MOTA</strong> and <strong>10.2% in DetA</strong>, which we attribute to the explicit 3D information LiDAR provides.
+                LiDAR-only tracking runs about <strong>130&times; faster</strong> (0.22 &rarr; 28.4 FPS) and the fusion about 30&times; faster (0.22 &rarr; 6.34 FPS), because triangulation, 86% of the camera-only processing time, is no longer needed.
+              </p>
+            </div>
+
+            <div class="fwltable-card">
+              <div class="table-container">
+                <table class="table is-bordered is-striped is-hoverable is-fullwidth fwltable__table">
+                  <caption class="fwltable__caption"><strong>Overall comparison of MOT performance.</strong></caption>
+                  <thead>
+                    <tr>
+                      <th>Method</th><th>HOTA &uarr;</th><th>IDF1 &uarr;</th><th>AssA &uarr;</th><th>MOTA &uarr;</th><th>DetA &uarr;</th><th>FPS &uarr;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="is-ours"><td><strong>LiDAR-camera-fusion</strong></td><td>0.917</td><td>0.930</td><td>0.881</td><td>0.957</td><td>0.955</td><td>6.34</td></tr>
+                    <tr class="is-ours"><td><strong>LiDAR-only</strong></td><td>0.917</td><td>0.918</td><td>0.877</td><td>0.957</td><td>0.955</td><td>28.4</td></tr>
+                    <tr><td>Camera-only</td><td>0.831</td><td>0.868</td><td>0.810</td><td>0.842</td><td>0.853</td><td>0.218</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="fwltable-card">
+              <div class="table-container">
+                <table class="table is-bordered is-striped is-hoverable is-fullwidth fwltable__table">
+                  <caption class="fwltable__caption"><strong>Inference speed (ms/frame).</strong></caption>
+                  <thead>
+                    <tr><th></th><th>Camera-only</th><th>LiDAR-only</th><th>LiDAR-camera-fusion</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Detection &amp; Tracking</td><td>628.0</td><td>35.2</td><td>35.2</td></tr>
+                    <tr><td>Triangulation</td><td>3954.5</td><td>&ndash;</td><td>&ndash;</td></tr>
+                    <tr><td>LiDAR-camera-fusion ReID</td><td>&ndash;</td><td>&ndash;</td><td>122.6</td></tr>
+                    <tr class="is-ours"><td><strong>Total</strong></td><td>4582.5</td><td><strong>35.2</strong></td><td>157.8</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="content has-text-justified">
+              <h3 class="title is-5">Recovering IDs after Occlusion</h3>
+              <p>
+                We measure the ID recovery rate <em>R</em><sub>ID</sub>: how often a ground-truth ID and tracker ID pair that was once lost is later tracked as the same pair again.
+                Camera fusion raises it from <strong>0.16 to 0.24</strong>, as LiDAR positions combined with camera appearance allow accurate re-identification after occlusions.
+                The fusion is slower than LiDAR-only (28.4 &rarr; 6.3 FPS) but still fast enough for real-time processing.
+              </p>
+            </div>
+
+            <div class="fwltable-card">
+              <div class="table-container">
+                <table class="table is-bordered is-striped is-hoverable is-fullwidth fwltable__table">
+                  <caption class="fwltable__caption"><strong>Comparison between LiDAR-only and LiDAR-camera-fusion.</strong></caption>
+                  <thead>
+                    <tr><th>Method</th><th>Occlusion Recovery Rate &uarr;</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr class="is-ours"><td><strong>LiDAR-camera-fusion</strong></td><td><strong>0.241</strong></td></tr>
+                    <tr><td>LiDAR-only</td><td>0.158</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End results -->
+
+
+  <!-- Dataset access -->
+  <section class="hero is-small is-light" id="dataset-access">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Dataset Access</h2>
+            <div class="content has-text-justified">
+              <p>
+                The BasketLiDAR dataset (LiDAR point clouds, camera images and annotations) is available <strong>upon request for research purposes</strong>.
+                Please email <a href="mailto:hayashi.ryu430@keio.jp">hayashi.ryu430@keio.jp</a> with your name, affiliation and intended use. Once approved, we will share a download link.
+              </p>
+              <ul>
+                <li>The dataset may be used for non-commercial research and academic publications. Redistribution, rehosting or public sharing, in whole or in part, is not allowed without permission from the authors.</li>
+                <li>The code in the <a href="https://github.com/Keio-CSG/BasketLiDAR" target="_blank">GitHub repository</a> (point cloud to BEV detection, BEV detection to tracks, and camera-fusion post-processing notebooks) is released under the MIT License.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End dataset access -->
+
+
+  <!-- Acknowledgements -->
+  <section class="hero is-small is-light section-white">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Acknowledgements</h2>
+            <div class="content has-text-justified">
+              <p>
+                This research was supported in part by the JST CREST JPMJCR23M4, JST PRESTO JPMJPR22PA, and JSPS KAKENHI 24K02940.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End acknowledgements -->
+
+
+  <!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+<pre id="bibtex-code"><code>@inproceedings{hayashi2025basketlidar,
+    author    = {Hayashi, Ryunosuke and Torimi, Kohei and Nagata, Rokuto and Ikeda, Kazuma and Sako, Ozora and Nakamura, Taichi and Tani, Masaki and Aoki, Yoshimitsu and Yoshioka, Kentaro},
+    title     = {BasketLiDAR: The First LiDAR-Camera Multimodal Dataset for Professional Basketball MOT},
+    booktitle = {Proceedings of the 8th International ACM Workshop on Multimedia Content Analysis in Sports (MMSports '25)},
+    year      = {2025},
+    pages     = {78--86},
+    doi       = {10.1145/3728423.3759401}
+}</code></pre>
+    </div>
+  </section>
+  <!--End BibTex citation -->
+  </main>
+
+
+  <footer class="footer is-light">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
